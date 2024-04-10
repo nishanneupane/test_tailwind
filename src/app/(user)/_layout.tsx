@@ -1,6 +1,6 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { Link, Tabs } from 'expo-router';
 import { Image, Pressable, Text, View } from 'react-native';
 
@@ -38,6 +38,32 @@ export default function TabLayout() {
 
         }}
       />
+
+      <Tabs.Screen
+        name="shop"
+        options={{
+          title: 'Shop',
+          tabBarIcon: ({ color }) => <MaterialIcons name="shopping-bag" size={24} color={color} />,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="orders"
+        options={{
+          title: 'Orders',
+          tabBarIcon: ({ color }) => <MaterialIcons name="reorder" size={24} color={color} />,
+          headerShown: false,
+        }}
+      />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: 'Activity',
+          tabBarIcon: ({ color }) => <MaterialIcons name="notifications-active" size={24} color={color} />,
+          headerShown: false,
+        }}
+      />
+
       <Tabs.Screen
         name="profile"
         options={{

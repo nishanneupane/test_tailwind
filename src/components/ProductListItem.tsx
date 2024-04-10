@@ -1,13 +1,16 @@
 import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign, Ionicons } from '@expo/vector-icons';
 import { Product } from "../types";
+import { useSegments } from "expo-router";
 import { Link } from "expo-router";
 
 export const ProductListItem = ({ product }: {
     product: Product
 }) => {
+    const segments = useSegments()
     return (
-        <Link href={`/menu/${product.id}`} asChild>
+        // @ts-ignore
+        <Link href={`/${segments[0]}/menu/${product.id}`} asChild>
             <Pressable style={styles.container}>
                 <Image
                     source={{ uri: product.image || 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png' }}

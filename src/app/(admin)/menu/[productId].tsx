@@ -81,7 +81,7 @@ const ProductDetailsScreen = () => {
                                     backgroundColor: size === selectedSize ? 'gainsboro' : 'white',
                                 },
                             ]} onPress={() => setSelectedSize(size)}>
-                                <Text className='text-rose-500'>
+                                <Text>
                                     {size}
                                 </Text>
                             </Pressable>
