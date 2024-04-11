@@ -1,6 +1,6 @@
 import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
-import { Stack, useRouter } from 'expo-router'
+import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { defaultPizzaImage } from '@/src/constants/images'
 import Button from '@/src/components/button'
 import * as ImagePicker from "expo-image-picker"
@@ -12,6 +12,9 @@ const CreateProduct = () => {
     const [errors, setErrors] = useState("")
 
     const router = useRouter()
+    const { productId } = useLocalSearchParams()
+    const isUpdating = !!productId
+
 
     const validateInput = () => {
         setErrors("")
@@ -42,21 +45,47 @@ const CreateProduct = () => {
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
         })
 
-        console.log(result)
         if (!result.canceled) {
             setImage(result.assets[0].uri)
         }
     }
 
+    const onUpdate = () => {
+        if (!validateInput()) {
+            return
+        }
+        Alert.alert("Item Updated successfully", "you have successfully updated your product. Happy sales!:)")
+        setName('')
+        setImage('')
+        setPrice('')
+    }
+    const onDelete = () => {
+        console.error("Deleted successful")
+    }
+
+    const confirmDelete = () => {
+        Alert.alert("Delete", "Are you sure you want to delete this product?", [
+            {
+                text: "Cancel",
+                style: "cancel"
+            },
+            {
+                text: "Delete",
+                style: "destructive",
+                onPress: () => onDelete()
+            },
+        ])
+    }
+
     return (
         <>
-            <Stack.Screen options={{ title: "Create a Product" }} />
+            <Stack.Screen options={{ title: isUpdating ? "Edit Product" : "Create a Product" }} />
             <View style={styles.container}>
                 <Pressable
                     onPress={pickImage}
@@ -91,7 +120,19 @@ const CreateProduct = () => {
                     onChangeText={setPrice}
                 />
                 <Text style={styles.error}>{errors}</Text>
-                <Button onPress={onCreate} text="Create" />
+                {
+                    isUpdating ? (
+                        <>
+                            <Button onPress={onUpdate} text="Update" />
+                            <Text onPress={confirmDelete} style={{ color: "red", textAlign: "center" }}>
+                                Delete
+                            </Text>
+                        </>
+                    ) : (
+                        <Button onPress={onCreate} text="Create" style={{ backgroundColor: "red" }} />
+
+                    )
+                }
             </View>
         </>
     )

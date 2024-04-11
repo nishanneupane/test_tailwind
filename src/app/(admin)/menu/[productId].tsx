@@ -3,7 +3,6 @@ import React, { useState } from 'react'
 import { Link, Stack, Tabs, useLocalSearchParams, useRouter } from 'expo-router'
 import products from '@/assets/data/products'
 import { PizzaSize } from '@/src/types'
-import Button from '@/src/components/button'
 import { FontAwesome } from '@expo/vector-icons'
 import Colors from '@/src/constants/Colors'
 import { useCart } from '@/src/providers/cart-provider'
@@ -13,6 +12,7 @@ export const sizes: PizzaSize[] = ['L', 'M', 'S', 'XL']
 const ProductDetailsScreen = () => {
     const { productId } = useLocalSearchParams()
     const { addItem, items } = useCart()
+
 
     const product = products.find((p) => p.id.toString() === productId)
 
@@ -38,7 +38,7 @@ const ProductDetailsScreen = () => {
         <View style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-around", paddingHorizontal: 23 }}>
             <Stack.Screen options={{
                 title: `${product.name}`, headerRight: () => (
-                    <Link href="/cart" asChild>
+                    <Link href={`/(admin)/menu/create?productId=${productId}`} asChild>
                         <Pressable>
                             {({ pressed }) => (
                                 <View style={{ display: "flex", alignItems: "center", width: "100%", marginRight: 20 }}>
@@ -49,7 +49,7 @@ const ProductDetailsScreen = () => {
                                         style={{ marginRight: 15, opacity: pressed ? 0.5 : 1, color: "#f97316" }}
                                     />
 
-                                    
+
                                 </View>
                             )}
                         </Pressable>
@@ -64,7 +64,7 @@ const ProductDetailsScreen = () => {
                     style={styles.image}
                 />
             </View>
-            
+
 
             <View style={{ marginTop: 10, width: "100%" }}>
                 <Text style={{ fontSize: 20, fontWeight: "bold" }}> {product.name}</Text>
