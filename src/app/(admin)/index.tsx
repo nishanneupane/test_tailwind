@@ -4,7 +4,7 @@ import { Redirect } from 'expo-router'
 
 export default function Home() {
   return (
-    // <Redirect href={"/(admin)/menu/"}/>
-    <Redirect href={"/(auth)/"} />
+    <Redirect href={"/(admin)/menu/"} />
+    // <Redirect href={"/(auth)/"} />
   )
 }
