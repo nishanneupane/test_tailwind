@@ -43,17 +43,13 @@ const ProductDetailsScreen = () => {
                             {({ pressed }) => (
                                 <View style={{ display: "flex", alignItems: "center", width: "100%", marginRight: 20 }}>
                                     <FontAwesome
-                                        name="shopping-cart"
+                                        name="pencil"
                                         size={25}
                                         color={Colors[colorScheme ?? 'light'].text}
                                         style={{ marginRight: 15, opacity: pressed ? 0.5 : 1, color: "#f97316" }}
                                     />
-                                    {/* <Text style={{ color: "#fff", fontWeight: "900", opacity: pressed ? 0.5 : 1 }}>
-                      SIGN IN
-                    </Text> */}
-                                    <Text style={{ position: "absolute", top: 0, right: 1, padding: 5, borderRadius: 10, width: 20, height: 20, backgroundColor: "#f97316", display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "row", fontSize: 12, paddingBottom: 0, paddingTop: 0, color: "#fff" }}>
-                                        {items.length}
-                                    </Text>
+
+                                    
                                 </View>
                             )}
                         </Pressable>
@@ -68,31 +64,11 @@ const ProductDetailsScreen = () => {
                     style={styles.image}
                 />
             </View>
-            <View style={{ marginTop: 10 }}>
-                <Text style={{ textAlign: "left", fontWeight: "800", fontSize: 16 }}>
-                    Select Size
-                </Text>
-                <View style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "row", gap: 10, marginTop: 20, width: "100%" }}>
-                    {
-                        sizes.map((size) => (
-                            <Pressable key={size} style={[
-                                styles.size,
-                                {
-                                    backgroundColor: size === selectedSize ? 'gainsboro' : 'white',
-                                },
-                            ]} onPress={() => setSelectedSize(size)}>
-                                <Text>
-                                    {size}
-                                </Text>
-                            </Pressable>
-                        ))
-                    }
-                </View>
-            </View>
+            
 
             <View style={{ marginTop: 10, width: "100%" }}>
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>Price : Rs.{product.price.toFixed(2)}</Text>
-                <Button text='Add to cart' onPress={addToCart} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }} />
+                <Text style={{ fontSize: 20, fontWeight: "bold" }}> {product.name}</Text>
+                <Text style={{ fontSize: 17, fontWeight: "500" }}>Price : Rs.{product.price.toFixed(2)}</Text>
             </View>
         </View>
     )

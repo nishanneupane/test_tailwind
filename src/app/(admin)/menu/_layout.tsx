@@ -15,20 +15,17 @@ const MenuStack = () => {
                     // headerShown: false,
                     headerTitle: "Home",
                     headerRight: () => (
-                        <Link href="/cart" asChild>
+                        <Link href="/(admin)/menu/create" asChild>
                             <Pressable>
                                 {({ pressed }) => (
-                                    <View style={{ display: "flex", alignItems: "center", width: "100%", paddingHorizontal: 20, backgroundColor: "#f97316", paddingVertical: 10, borderRadius: 5, borderBottomWidth: 6, borderBottomColor: "#ea580c", marginBottom: 0, marginRight: 20, position: "relative" }}>
+                                    <View style={{ display: "flex", alignItems: "center", width: "100%", borderRadius: 5, marginBottom: 0, marginRight: 20, position: "relative" }}>
                                         <FontAwesome
-                                            name="shopping-cart"
-                                            size={25}
+                                            name="plus-square-o"
+                                            size={30}
                                             color={Colors[colorScheme ?? 'light'].text}
                                             style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
                                         />
-                                        {/* <Text style={{ color: "#fff", fontWeight: "900", opacity: pressed ? 0.5 : 1 }}>
-                                  SIGN IN
-                                </Text> */}
-                                        
+
                                     </View>
                                 )}
                             </Pressable>
