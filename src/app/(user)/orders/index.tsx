@@ -10,7 +10,6 @@ const OrdersScreen = () => {
                 data={orders}
                 renderItem={({ item }) => (<OrderItem order={item} />)}
                 contentContainerStyle={{ padding: 10, gap: 10 }}
-                
             />
         </View>
     )
