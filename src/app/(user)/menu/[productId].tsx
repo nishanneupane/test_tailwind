@@ -7,6 +7,7 @@ import Button from '@/src/components/button'
 import { FontAwesome } from '@expo/vector-icons'
 import Colors from '@/src/constants/Colors'
 import { useCart } from '@/src/providers/cart-provider'
+import { defaultPizzaImage } from '@/src/constants/images'
 
 export const sizes: PizzaSize[] = ['L', 'M', 'S', 'XL']
 
@@ -35,7 +36,7 @@ const ProductDetailsScreen = () => {
 
     }
     return (
-        <View style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-around", paddingHorizontal: 23 }}>
+        <>
             <Stack.Screen options={{
                 title: `${product.name}`, headerRight: () => (
                     <Link href="/cart" asChild>
@@ -60,41 +61,45 @@ const ProductDetailsScreen = () => {
                     </Link>
                 )
             }} />
-            <View style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <Image
-                    source={{ uri: product.image }}
-                    width={200}
-                    height={200}
-                    style={styles.image}
-                />
-            </View>
-            <View style={{ marginTop: 10 }}>
-                <Text style={{ textAlign: "left", fontWeight: "800", fontSize: 16 }}>
-                    Select Size
-                </Text>
-                <View style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "row", gap: 10, marginTop: 20, width: "100%" }}>
-                    {
-                        sizes.map((size) => (
-                            <Pressable key={size} style={[
-                                styles.size,
-                                {
-                                    backgroundColor: size === selectedSize ? 'gainsboro' : 'white',
-                                },
-                            ]} onPress={() => setSelectedSize(size)}>
-                                <Text>
-                                    {size}
-                                </Text>
-                            </Pressable>
-                        ))
-                    }
+
+            <View style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-around", paddingHorizontal: 23,gap:3}}>
+
+                <View style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Image
+                        source={{ uri: product.image }}
+                        width={200}
+                        height={200}
+                        style={styles.image}
+                    />
+                </View>
+                <View style={{ marginTop: 10 }}>
+                    <Text style={{ textAlign: "left", fontWeight: "800", fontSize: 16 }}>
+                        Select Size
+                    </Text>
+                    <View style={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "row", gap: 10, marginTop: 20, width: "100%" }}>
+                        {
+                            sizes.map((size) => (
+                                <Pressable key={size} style={[
+                                    styles.size,
+                                    {
+                                        backgroundColor: size === selectedSize ? 'gainsboro' : 'white',
+                                    },
+                                ]} onPress={() => setSelectedSize(size)}>
+                                    <Text>
+                                        {size}
+                                    </Text>
+                                </Pressable>
+                            ))
+                        }
+                    </View>
+                </View>
+
+                <View style={{ marginTop: 10, width: "100%" }}>
+                    <Text style={{ fontSize: 20, fontWeight: "bold" }}>Price : Rs.{product.price.toFixed(2)}</Text>
+                    <Button text='Add to cart' onPress={addToCart} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }} />
                 </View>
             </View>
-
-            <View style={{ marginTop: 10, width: "100%" }}>
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>Price : Rs.{product.price.toFixed(2)}</Text>
-                <Button text='Add to cart' onPress={addToCart} style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%" }} />
-            </View>
-        </View>
+        </>
     )
 }
 

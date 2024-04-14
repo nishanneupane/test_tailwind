@@ -6,8 +6,7 @@ import products from '@/assets/data/products';
 
 export default function Home() {
   return (
-    <View>
-
+    <>
       <FlatList
         data={products}
         renderItem={({ item }) => <ProductListItem product={item} />}
@@ -21,6 +20,6 @@ export default function Home() {
           />
         </ScrollView>}
       />
-    </View>
+    </>
   );
 }
