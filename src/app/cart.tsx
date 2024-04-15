@@ -31,7 +31,7 @@ export default function CartScreen() {
             <TouchableOpacity style={{ width: "100%", paddingHorizontal: 20 }}>
               <Text style={{ paddingHorizontal: 20, fontSize: 23 }}>
                 Total : <Text style={{ fontWeight: "900", fontSize: 29 }}>
-                  ${total}
+                  ${total.toFixed(2)}
                 </Text>
               </Text>
               <Button text='Proceed to Checkout' style={{ width: "100%" }} />

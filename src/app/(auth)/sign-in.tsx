@@ -2,11 +2,13 @@ import { View, Text, SafeAreaView, TextInput, Image, Alert } from 'react-native'
 import React, { useState } from 'react'
 import Button from '@/src/components/button'
 import { Link } from 'expo-router'
+import { supabase } from '@/src/lib/supabase'
 
 const SignIn = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [errors, setErrors] = useState("")
+    const [loading, setLoading] = useState(false);
 
     const validate = () => {
         if (!email) {
@@ -19,16 +21,30 @@ const SignIn = () => {
         }
         return true
     }
-    
+
     const onSubmit = () => {
         setErrors('')
         if (!validate()) {
             return
         }
-        Alert.prompt("You are signed in")
+        signInWithEmail()
 
         setEmail('')
         setPassword('')
+    }
+
+    async function signInWithEmail() {
+        setLoading(true);
+        const { error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password,
+        });
+
+        if (error) Alert.alert(error.message);
+        else {
+            Alert.alert("You are signed in", "Now, you have full access to the platform.")
+        }
+        setLoading(false);
     }
     return (
         <SafeAreaView>
@@ -78,7 +94,7 @@ const SignIn = () => {
                 />
 
                 <Text style={{ textAlign: "center", color: "red" }}>{errors}</Text>
-                <Button text='Sign In' onPress={onSubmit} />
+                <Button text={loading ? "Signing in ..." : 'Sign In'} onPress={onSubmit} />
                 <Link href={"/(auth)/sign-up"} style={{ width: "100%", textAlign: 'center' }}>
                     <Text style={{ textAlign: "center", color: "#f97316" }}>
                         I don&apos;t have an account
