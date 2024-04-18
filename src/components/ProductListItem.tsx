@@ -1,11 +1,11 @@
 import { Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { AntDesign, Ionicons } from '@expo/vector-icons';
-import { Product } from "../types";
 import { useSegments } from "expo-router";
 import { Link } from "expo-router";
+import { Tables } from "../types";
 
 export const ProductListItem = ({ product }: {
-    product: Product
+    product: Tables<'products'>
 }) => {
     const segments = useSegments()
     return (
@@ -63,7 +63,8 @@ const styles = StyleSheet.create({
         fontSize: 24
     },
     image: {
-        width: "100%",
-        aspectRatio: 1
+        width: 160,
+        aspectRatio: 16/9,
+        borderRadius:19
     }
 });

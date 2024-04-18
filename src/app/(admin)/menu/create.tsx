@@ -1,20 +1,46 @@
-import { Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import React, { useState } from 'react'
+import { ActivityIndicator, Alert, Image, Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { defaultPizzaImage } from '@/src/constants/images'
 import Button from '@/src/components/button'
 import * as ImagePicker from "expo-image-picker"
+import { useDeleteProduct, useInsertProduct, useProduct, useUpdateProduct } from '@/src/api/products'
+import Colors from '@/src/constants/Colors'
 
 const CreateProduct = () => {
-    const [name, setName] = useState("")
-    const [price, setPrice] = useState("")
-    const [image, setImage] = useState<string | null>(null)
+    const { productId } = useLocalSearchParams()
+
+    const { data: product, error, isLoading } = useProduct(parseInt(typeof productId === 'string' ? productId : productId?.[0]))
+    const { mutate: insertProduct } = useInsertProduct();
+    const { mutate: updateProduct } = useUpdateProduct();
+    const { mutate: deleteProduct } = useDeleteProduct(parseInt(typeof productId === "string" ? productId : productId?.[0]))
+
+    const idString = parseFloat(typeof productId === 'string' ? productId : productId?.[0]);
+
+
+    const [name, setName] = useState(product ? product.name : "");
+    const [price, setPrice] = useState(product ? product.price.toString() : "");
+    const [image, setImage] = useState(product ? product.image : defaultPizzaImage);
+
+    useEffect(() => {
+        if (product) {
+            setName(product?.name)
+            setPrice(product?.price.toString())
+            setImage(product.image)
+        }
+    }, [updateProduct])
+
     const [errors, setErrors] = useState("")
 
     const router = useRouter()
-    const { productId } = useLocalSearchParams()
-    const isUpdating = !!productId
 
+    if (isLoading) {
+        return <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+            <ActivityIndicator size={26} color={Colors.light.tint} />
+        </View>
+    }
+
+    const isUpdating = !!idString
 
     const validateInput = () => {
         setErrors("")
@@ -37,10 +63,16 @@ const CreateProduct = () => {
         if (!validateInput()) {
             return
         }
-        Alert.alert("Item created successfully", "you have successfully created your product. Happy sales!:)")
+        try {
+            insertProduct({ name, image, price: parseFloat(price) })
+            Alert.alert("Item created successfully", "you have successfully created your product. Happy sales!:)")
+            router.push("/")
+        } catch (error) {
+            Alert.alert("Something went wrong")
+        }
         setName('')
         setImage('')
-        setPrice('')
+        setPrice("")
     }
 
     const pickImage = async () => {
@@ -60,13 +92,39 @@ const CreateProduct = () => {
         if (!validateInput()) {
             return
         }
-        Alert.alert("Item Updated successfully", "you have successfully updated your product. Happy sales!:)")
-        setName('')
-        setImage('')
-        setPrice('')
+        try {
+            updateProduct(
+                { id: idString, name, price: parseFloat(price), image },
+                {
+                    onSuccess: () => {
+                        setName('')
+                        setImage('')
+                        setPrice("")
+                        router.push("/(admin)/");
+                    },
+                }
+            );
+            Alert.alert("Item updated successfully", "you have successfully updated your product. Happy sales!:)")
+            router.push("/")
+
+            setName('')
+            setImage('')
+            setPrice("")
+
+        } catch (error) {
+            Alert.alert("Something went wrong")
+        }
     }
     const onDelete = () => {
-        console.error("Deleted successful")
+        deleteProduct(idString, {
+            onSuccess: () => {
+                router.push("/(admin)/")
+                setName('')
+                setImage('')
+                setPrice("")
+            }
+        })
+        Alert.alert("Deleted successful")
     }
 
     const confirmDelete = () => {
@@ -161,6 +219,7 @@ const styles = StyleSheet.create({
         width: '50%',
         aspectRatio: 1,
         alignSelf: 'center',
+        borderRadius: 5
     },
     error: {
         color: 'red',

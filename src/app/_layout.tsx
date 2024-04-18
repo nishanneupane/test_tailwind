@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { useColorScheme } from '@/src/components/useColorScheme';
 import { CartProvider } from "../providers/cart-provider";
 import AuthProvider, { useAuth } from "../providers/auth-provider";
+import QueryProvider from "../providers/query-provider";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -64,19 +65,21 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DefaultTheme : DefaultTheme}>
-      <CartProvider>
-        <AuthProvider>
-          <Stack screenOptions={{
-            headerShown: false,
-            animation: "ios"
-          }}
-          >
-            <Stack.Screen name="(admin)" options={{ headerShown: false }} />
-            <Stack.Screen name="(user)" options={{ headerShown: false }} />
-            <Stack.Screen name="cart" options={{ presentation: 'modal', animation: "fade" }} />
-          </Stack>
-        </AuthProvider>
-      </CartProvider>
+      <AuthProvider>
+        <QueryProvider>
+          <CartProvider>
+            <Stack screenOptions={{
+              headerShown: false,
+              animation: "ios"
+            }}
+            >
+              <Stack.Screen name="(admin)" options={{ headerShown: false }} />
+              <Stack.Screen name="(user)" options={{ headerShown: false }} />
+              <Stack.Screen name="cart" options={{ presentation: 'modal', animation: "fade" }} />
+            </Stack>
+          </CartProvider>
+        </QueryProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

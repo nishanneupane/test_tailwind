@@ -1,11 +1,11 @@
 import React, { createContext, useContext, useState } from 'react'
-import { CartItem, Product } from '../types'
+import { CartItem, Product, Tables } from '../types'
 import { randomUUID } from "expo-crypto"
 
 
 type CartType = {
     items: CartItem[]
-    addItem: (product: Product, size: CartItem['size']) => void
+    addItem: (product: Tables<'products'>, size: CartItem['size']) => void
     updateQuantity: (itemId: string, amount: 1 | -1) => void
     total: number
 }

@@ -1,15 +1,30 @@
 import { View } from '@/src/components/Themed';
 import { ProductListItem } from '@/src/components/ProductListItem';
-import { FlatList, Image, ScrollView } from 'react-native';
-import products from '@/assets/data/products';
+import { ActivityIndicator, FlatList, Image, ScrollView, Text } from 'react-native';
+import { useProductList } from '@/src/api/products';
+import Colors from '@/src/constants/Colors';
 
 
 export default function Home() {
+  const { data, error, isLoading } = useProductList()
+
+  if (isLoading) {
+    return <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <ActivityIndicator size={26} color={Colors.light.tint} />
+    </View>
+  }
+
+  if (error) {
+    return <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <Text>Something went wrong!!</Text>
+    </View>
+  }
+
   return (
     <View>
 
       <FlatList
-        data={products}
+        data={data}
         renderItem={({ item }) => <ProductListItem product={item} />}
         numColumns={2}
         contentContainerStyle={{ gap: 10, padding: 10 }}

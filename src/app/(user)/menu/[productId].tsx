@@ -1,12 +1,12 @@
-import { Alert, Image, Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native'
+import { ActivityIndicator, Alert, Image, Pressable, StyleSheet, Text, useColorScheme, View } from 'react-native'
 import React, { useState } from 'react'
-import { Link, Stack, Tabs, useLocalSearchParams, useRouter } from 'expo-router'
-import products from '@/assets/data/products'
+import { Link, Stack, useLocalSearchParams, useRouter } from 'expo-router'
 import { PizzaSize } from '@/src/types'
 import Button from '@/src/components/button'
 import { FontAwesome } from '@expo/vector-icons'
 import Colors from '@/src/constants/Colors'
 import { useCart } from '@/src/providers/cart-provider'
+import { useProduct } from '@/src/api/products'
 import { defaultPizzaImage } from '@/src/constants/images'
 
 export const sizes: PizzaSize[] = ['L', 'M', 'S', 'XL']
@@ -14,8 +14,23 @@ export const sizes: PizzaSize[] = ['L', 'M', 'S', 'XL']
 const ProductDetailsScreen = () => {
     const { productId } = useLocalSearchParams()
     const { addItem, items } = useCart()
+    const [selectedSize, setSelectedSize] = useState<PizzaSize>("M")
+    const colorScheme = useColorScheme()
+    const router = useRouter()
 
-    const product = products.find((p) => p.id.toString() === productId)
+    const { data: product, error, isLoading } = useProduct(parseInt(typeof productId === 'string' ? productId : productId[0]))
+
+    if (isLoading) {
+        return <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+            <ActivityIndicator size={26} color={Colors.light.tint} />
+        </View>
+    }
+
+    if (error) {
+        return <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+            <Text>Something went wrong!!</Text>
+        </View>
+    }
 
     if (!product) {
         return (
@@ -25,9 +40,8 @@ const ProductDetailsScreen = () => {
         )
     }
 
-    const [selectedSize, setSelectedSize] = useState<PizzaSize>("M")
-    const colorScheme = useColorScheme()
-    const router = useRouter()
+
+
     const addToCart = () => {
         if (!product) return
         addItem(product, selectedSize)
@@ -62,11 +76,11 @@ const ProductDetailsScreen = () => {
                 )
             }} />
 
-            <View style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-around", paddingHorizontal: 23,gap:3}}>
+            <View style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-around", paddingHorizontal: 23, gap: 3 }}>
 
                 <View style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <Image
-                        source={{ uri: product.image }}
+                        source={{ uri: product.image || defaultPizzaImage }}
                         width={200}
                         height={200}
                         style={styles.image}
